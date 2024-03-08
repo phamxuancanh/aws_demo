@@ -4,7 +4,10 @@ const AWS = require('aws-sdk')
 require('dotenv').config()
 const path = require('path');
 const PORT = 3000
+const bodyParser = require('body-parser');
+
 const app = express()
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.json({ extended: false }))
 app.use(express.static('./views'))
 
@@ -56,7 +59,7 @@ app.get('/', async (req, res) => {
             TableName: tableName
         }
         const data = await dynamodb.scan(params).promise()
-        console.log('Data from DynamoDB', data.Items)
+        // console.log('Data from DynamoDB', data.Items)
         return res.render('index.ejs', { courses: data.Items })
     }catch(err){
         console.log('Error retrieving data from DynamoDB', err)
@@ -82,7 +85,8 @@ app.post('/save',upload.single('file'), (req, res) => {
             Bucket: bucketName,
             Key: filePath,
             Body: req.file.buffer,
-            ContentType: req.file.mimetype
+            ContentType: req.file.mimetype,
+            ACL: 'public-read' 
         }
 
         s3.upload(paramsS3, async (err, data) => {
@@ -112,6 +116,39 @@ app.post('/save',upload.single('file'), (req, res) => {
         return res.status(500).json({ message: 'Internal Server Error' })
     }
 })
+
+app.post('/delete', upload.fields([]), (req, res) => {
+    try {
+        const listCheckboxSelected = req.body.delete;
+        if (!listCheckboxSelected || Object.keys(listCheckboxSelected).length === 0) {
+            return res.redirect('/');
+        }
+        function onDeleteItem(length) {
+            if (length < 0) {
+                return res.redirect('/');
+            }
+            const params = {
+                TableName: tableName,
+                Key: {
+                    id: listCheckboxSelected[length]
+                }
+            };
+            dynamodb.delete(params, (err, data) => {
+                if (err) {
+                    console.log('Error deleting item from DynamoDB', err);
+                    return res.status(500).json({ message: 'Internal Server Error' });
+                } else {
+                    onDeleteItem(length - 1);
+                }
+            });
+        }
+        onDeleteItem(Object.keys(listCheckboxSelected).length - 1);
+    } catch (err) {
+        console.log('Error deleting item from DynamoDB', err);
+        return res.status(500).json({ message: 'Internal Server Error' });
+    }
+});
+
 
 app.listen(PORT, () => {
     console.log(`Server is running at http://localhost:${PORT}`)
