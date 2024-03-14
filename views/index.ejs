@@ -1,10 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>S3</title>
 </head>
+
 <body>
     <form action="/save" method="post" enctype="multipart/form-data">
         <input type="text" id="id" name="id" placeholder="id"><br>
@@ -35,18 +37,12 @@
                         <td><%= item.semester %></td>
                         <td><%= item.department %></td>
                         <td><img src = "<%= item.image %>" alt = "avt_<%= item.id %>" width="48" height="48"/></td>
-                        <td><input type ="checkbox" name="<%= item.id %>" id="<%=item.id %>"/></td>
                     </tr>
                 <% }); %>
             </tbody>
 
         </table>
-
     </div>
-    <form action ="/delete" method="post" enctype="multipart/form-data">
-        
-    </form>
-
-        
 </body>
+
 </html>
