@@ -35,11 +35,18 @@
                         <td><%= item.semester %></td>
                         <td><%= item.department %></td>
                         <td><img src = "<%= item.image %>" alt = "avt_<%= item.id %>" width="48" height="48"/></td>
+                        <td><input type ="checkbox" name="<%= item.id %>" id="<%=item.id %>"/></td>
                     </tr>
                 <% }); %>
             </tbody>
 
         </table>
+
     </div>
+    <form action ="/delete" method="post" enctype="multipart/form-data">
+        
+    </form>
+
+        
 </body>
 </html>
