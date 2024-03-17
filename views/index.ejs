@@ -10,9 +10,21 @@
 <body>
     <form action="/save" method="post" enctype="multipart/form-data">
         <input type="text" id="id" name="id" placeholder="id"><br>
-        <input type="text" id="name" name="name" placeholder="name"><br>
-        <input type="text" id="semester" name="semester" placeholder="semester"><br>
-        <input type="text" id="department" name="department" placeholder="course"><br>
+        <input type="text" id="name" name="name" placeholder="name" required pattern="[A-Za-z\s]+"><br> <!-- Added required and pattern for validation -->
+        <select id="semester" name="semester"> <!-- Changed to combobox -->
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <!-- Add more options as needed -->
+        </select><br>
+        <fieldset> <!-- Changed to radio buttons -->
+            <legend>Department:</legend>
+            <label><input type="radio" name="department" value="Computer Science">Computer Science</label><br>
+            <label><input type="radio" name="department" value="Mathematics">Mathematics</label><br>
+            <label><input type="radio" name="department" value="Physics">Physics</label><br>
+            <!-- Add more departments as needed -->
+        </fieldset><br>
         <input type="file" id="image" name="file" accept="image/*">
         <input type="submit" value="ADD">
     </form>
