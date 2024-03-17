@@ -10,7 +10,6 @@ const app = express()
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.json({ extended: false }))
 app.use(express.static('./views'))
-
 app.set('view engine', 'ejs')
 app.set('views', './views')
 process.env.AWS_SDK_SUPRESS_MAINTENANCE_MODE_MESSAGE = 1
@@ -40,7 +39,7 @@ const upload = multer({
     fileFilter(req, file, callback) {
         checkFileType(file, callback)
     }
-})
+})  
 
 function checkFileType(file, callback) {
     const fileTypes = /jpeg|jpg|png|gif/;
@@ -51,7 +50,7 @@ function checkFileType(file, callback) {
     }
     return callback('Error: Images Only!')
 }
- 
+
 app.get('/', async (req, res) => {
     // return res.render('index', { courses })
     try{
@@ -69,7 +68,7 @@ app.get('/', async (req, res) => {
 // app.
 app.post('/save',upload.single('file'), (req, res) => {
     try{
-        if (!req.file) {
+        if (!req.file) {        
             console.log('No file uploaded');
             return res.status(400).json({ message: 'No file uploaded' });
         }
@@ -80,7 +79,6 @@ app.post('/save',upload.single('file'), (req, res) => {
         const image = req.file ? req.file.originalname.split('.') : [];
         const fileType = image[image.length - 1]
         const filePath = `${id}_${Date.now().toString()}.${fileType}`
-
         const paramsS3 = {
             Bucket: bucketName,
             Key: filePath,
@@ -88,7 +86,6 @@ app.post('/save',upload.single('file'), (req, res) => {
             ContentType: req.file.mimetype,
             ACL: 'public-read' 
         }
-
         s3.upload(paramsS3, async (err, data) => {
             if(err) {
                 console.log('Error uploading file to S3', err)

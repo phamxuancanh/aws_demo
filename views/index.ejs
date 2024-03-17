@@ -28,45 +28,33 @@
         <input type="file" id="image" name="file" accept="image/*">
         <input type="submit" value="ADD">
     </form>
+    <div class = "content">
+        <table border="true">
+            <caption>Danh sach cac mon hoc</caption>
 
-    <form action="/delete" method="post">
-        <!-- <input type="submit" value="DELETE"> -->
-        <div class="content">
-            <table border="true">
-                <caption>Danh sach cac mon hoc</caption>
-                <thead>
+            <thead>
+                <tr>
+                    <th>STT</th>
+                    <th>Name</th>
+                    <th>Semester</th>
+                    <th>Department</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                <% courses.forEach(item => { %>
                     <tr>
-                        <th>STT</th>
-                        <th>Name</th>
-                        <th>Semester</th>
-                        <th>Department</th>
-                        <th>Image</th>
+                        <td><%= item.id %></td>
+                        <td><%= item.name %></td>
+                        <td><%= item.semester %></td>
+                        <td><%= item.department %></td>
+                        <td><img src = "<%= item.image %>" alt = "avt_<%= item.id %>" width="48" height="48"/></td>
                     </tr>
-                </thead>
-                <tbody>
-                    <% courses.forEach(item=> { %>
-                        <tr>
-                            <td>
-                                <%= item.id %>
-                            </td>
-                            <td>
-                                <%= item.name %>
-                            </td>
-                            <td>
-                                <%= item.semester %>
-                            </td>
-                            <td>
-                                <%= item.department %>
-                            </td>
-                            <td><img src="<%= item.image %>" alt="avt_<%= item.id %>" width="48" height="48" /></td>
-                            <td><input type="checkbox" name="delete" value="<%= item.id %>" /></td>
-                        </tr>
-                        <% }); %>
-                </tbody>
-            </table>
-            <button type="submit">Delete</button>
-        </div>
-    </form>
+                <% }); %>
+            </tbody>
+
+        </table>
+    </div>
 </body>
 
 </html>
